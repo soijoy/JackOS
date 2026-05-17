@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="JackOS/JackOS.vcxproj" Id="b1a516e8-c41a-4e37-94ce-c55663e0993d" />
+</Solution>
