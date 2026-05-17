@@ -40,6 +40,7 @@ class Math {
         }
         else {
             return true;
+        }
     }
 
     /** Returns the product of x and y. 
@@ -67,18 +68,71 @@ class Math {
      *  an an expression, it handles it by invoking this method.
      *  Thus, x/y and Math.divide(x,y) return the same value. */
     function int divide(int x, int y) {
+        var int q, qy2;
+        var int absX, absY;
+        var boolean isNegative;
+
+        // 答えがマイナスになるかどうかの判定 (片方だけがマイナスの時にtrue)
+        let isNegative = ((x < 0) & (y > 0)) | ((x > 0) & (y < 0));
+        
+        let absX = Math.abs(x);
+        let absY = Math.abs(y);
+
+        // ※ここで元の y > x の代わりに、絶対値で判定と再帰を行う
+        if ((absY > absX) | (absY < 0)) {
+            return 0;
+        }
+        
+        let q = Math.divide(absX, absY + absY);
+        let qy2 = Math.multiply(q, absY);
+        let qy2 = qy2 + qy2; 
+
+        if ((absX - qy2) < absY) {
+            let q = q + q; // 一旦変数に入れる
+        }
+        else {
+            let q = q + q + 1;
+        }
+
+        // 最後に符号を調整して返す
+        if (isNegative) { return -q; }
+        else { return q; }
     }
 
     /** Returns the integer part of the square root of x. */
     function int sqrt(int x) {
+        var int y, j, approx, approxSquared;
+        
+        let y = 0;
+        let j = 7;
+        
+        // j が 0 以上の間ループする
+        while (~(j < 0)) {
+            let approx = y + Math.twoToThe[j]; // クラス変数にアクセス
+            let approxSquared = Math.multiply(approx, approx);
+            
+            // 条件1: オーバーフローしてマイナスになっていないか？ (>0)
+            // 条件2: 二乗した値が x 以下か？ (approxSquared <= x ではなく、~(approxSquared > x) と書く)
+            if ((approxSquared > 0) & ~(approxSquared > x)) {
+                let y = approx;
+            }
+            
+            let j = j - 1;
+        }
+        return y;
     }
 
     /** Returns the greater value. */
     function int max(int a, int b) {
+    if (a>b) {return a;}
+        if (a<b) {return b;}
+        else{return a;}
     }
 
     /** Returns the smaller value. */
     function int min(int a, int b) {
+        if (a<b) {return a;}
+        else{return b;}
     }
 
     /** Returns the absolute value of x. */
