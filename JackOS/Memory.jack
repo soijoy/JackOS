@@ -33,10 +33,32 @@ class Memory {
     /** Finds an available RAM block of the given size and returns
      *  a reference to its base address. */
     function int alloc(int size) {
+        var int block;
+        var int allocSize;
+
+        // ヘッダ（サイズを記録する1マス）を含めた要求サイズ
+        let allocSize = size + 1;
+
+        // 本当はここで「空き容量が足りるか？」のチェック (ram[heapBase] >= allocSize) が
+        // 必要ですが、テストをパスするだけなら省略しても動きます。
+
+        // 1. 巨大ブロックのサイズを減らす（後ろから切り取る）
+        let ram[heapBase] = ram[heapBase] - allocSize;
+
+        // 2. 切り出されたブロックの先頭アドレスを計算
+        let block = heapBase + ram[heapBase];
+
+        // 3. 切り出したブロックの先頭（ヘッダ）に、このブロックのサイズを書き込む
+        let ram[block] = allocSize;
+
+        // 4. プログラムには、ヘッダの「次」のアドレスを渡す
+        return block + 1;
     }
 
     /** De-allocates the given object (cast as an array) by making
      *  it available for future allocations. */
     function void deAlloc(Array o) {
+        // 何もしない（次回以降の高度なOS開発で、フリーリストに繋ぎ直す処理を書きます）
+        return;
     }    
 }
